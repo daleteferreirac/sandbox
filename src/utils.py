@@ -13,3 +13,19 @@ def load_pdb(filepath):
 
     return atoms_lines
 
+def extract_residues(atom_lines):
+    """
+    Extracts all unique residues from a list of ATOM/HETATM lines.
+    Returns a dictionary:
+        { (chain, residue_number) : residue_name }
+    """
+    residues = {}
+
+    for line in atom_lines:
+        res_name = line[17:20].strip()   # VAL, ALA, ARG...
+        chain = line[21].strip()         # A, B, C...
+        res_num = line[22:26].strip()    # 1, 2, 3, 8, 54...
+
+        residues[(chain, res_num)] = res_name
+
+    return residues
