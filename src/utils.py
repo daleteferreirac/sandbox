@@ -29,3 +29,19 @@ def extract_residues(atom_lines):
         residues[(chain, res_num)] = res_name
 
     return residues
+
+def count_residue_types(residues):
+    """
+    Counts how many times each amino acid appears.
+    residues: dict {(chain, res_num): res_name}
+    returns: dict {res_name: count}
+    """
+    counts = {}
+
+    for res_name in residues.values():
+        if res_name not in counts:
+            counts[res_name] = 1
+        else:
+            counts[res_name] += 1
+
+    return counts
