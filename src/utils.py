@@ -18,6 +18,8 @@ def extract_residues(atom_lines):
     Extracts all unique residues from a list of ATOM/HETATM lines.
     Returns a dictionary:
         { (chain, residue_number) : residue_name }
+        the key is a tuple of chain and residue number.
+        the value is a string of the residue name.
     """
     residues = {}
 
