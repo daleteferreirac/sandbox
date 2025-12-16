@@ -63,12 +63,22 @@ def classify_residues(residues):
         "POLAR": set(),
         "CHARGED": set()
     }
+
+    counts = {
+        "HYDROPHOBICS": 0,
+        "POLAR": 0,
+        "CHARGED": 0
+    }
+
     for res_name in residues.values():
         if res_name in hydrophobics:
             classes["HYDROPHOBICS"].add(res_name)
+            counts["HYDROPHOBICS"] += 1
         if res_name in polars:
             classes["POLAR"].add(res_name)
+            counts["POLAR"] += 1
         if res_name in charged:
             classes["CHARGED"].add(res_name)
+            counts["CHARGED"] += 1
 
-    return classes
+    return classes, counts
