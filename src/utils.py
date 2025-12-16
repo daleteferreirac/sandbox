@@ -82,3 +82,6 @@ def classify_residues(residues):
             counts["CHARGED"] += 1
 
     return classes, counts
+
+def add_count_chain():
+    pass
