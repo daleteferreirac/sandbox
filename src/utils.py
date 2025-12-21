@@ -20,17 +20,27 @@ def extract_residues(atom_lines):
         { (chain, residue_number) : residue_name }
         the key is a tuple of chain and residue number.
         the value is a string of the residue name.
+    chain_info dictionary:
+        {chain: number of residues}
     """
     residues = {}
+    chain_info = {}
 
     for line in atom_lines:
         res_name = line[17:20].strip()   # VAL, ALA, ARG...
         chain = line[21].strip()         # A, B, C...
         res_num = line[22:26].strip()    # 1, 2, 3, 8, 54...
 
-        residues[(chain, res_num)] = res_name
+        key = (chain, res_num)
+        if key not in residues:
+            residues[key] = res_name # ('A', '1'): 'THR'...
 
-    return residues
+            if chain not in chain_info:
+                chain_info[chain] = 1
+            else:
+                chain_info[chain] += 1
+
+    return residues, chain_info
 
 def count_residue_types(residues):
     """
@@ -52,7 +62,7 @@ def classify_residues(residues):
     """
     Classify residues based on hydrophobic, polar and charged.
     use the dictionary residues: {(chain, res_num): res_name}
-    returns: dict {class_residue: count}
+    returns: dict {class_residue: residues}, dict {class_residue: count}
     """
     hydrophobics = {"ALA", "VAL", "LEU", "ILE", "MET", "PHE", "TRP", "PRO"}
     polars = {"SER", "THR", "ASN", "GLN", "TYR", "CYS"}
