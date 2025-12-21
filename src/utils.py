@@ -91,4 +91,8 @@ def classify_residues(residues):
             classes["CHARGED"].add(res_name)
             counts["CHARGED"] += 1
 
+    total = sum(counts.values())
+    for key in counts:
+        counts[key] = {"count": counts[key], "percentage": round((counts[key] / total)*100, 2)}
+
     return classes, counts
