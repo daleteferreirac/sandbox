@@ -1,5 +1,5 @@
 # Main module of the structural PDB analyzer project.
-from utils import load_pdb, extract_residues, count_residue_types, classify_residues
+from utils import load_pdb, extract_residues, count_residue_types, classify_residues, multiple_protein_analyzer
 
 # Load atoms from PDB file
 atoms = load_pdb("../data/1A3N.pdb")
@@ -22,3 +22,6 @@ print("Total residue classes:", classes)
 print("Total residue counts:", counts)
 print("% per chain:", chain_counts)
 
+protein1 = "../data/1A3N.pdb"
+protein2 = "../data/1CRN.pdb"
+multiple_protein_analyzer(protein1, protein2)

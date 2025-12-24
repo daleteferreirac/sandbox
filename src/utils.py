@@ -118,3 +118,18 @@ def classify_residues(residues):
 
     return classes, counts, chain_counts
 
+def multiple_protein_analyzer(*filepaths):
+    """
+    Receives multiple PDB file paths and returns the information organized.
+    :param filepaths: tuple of PDB file paths
+    :return:
+    """
+    for path in filepaths:
+        protein_name = path.split("/")[-1]
+        print(f"Protein: {protein_name}")
+        atoms = load_pdb(path)
+        print(f"    Number of atoms: {len(atoms)}")
+
+
+    return
+
