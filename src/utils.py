@@ -1,8 +1,12 @@
 # Helper functions for the structural analyzer
 def load_pdb(filepath):
     """
-    Loads a PDB file.
-    filepath: path to PDB file
+    Load ATOM and HETATM records from a PDB file.
+    :param : str
+        path to PDB file
+    Returns
+    list of str
+        Lines corresponding to ATOM and HETATM records.
     """
     atoms_lines = []
     with open(filepath, "r") as f:
@@ -15,6 +19,9 @@ def load_pdb(filepath):
 def extract_residues(atom_lines):
     """
     Extracts all unique residues from a list of ATOM/HETATM lines.
+    :param : list of str
+        ATOM and HETATM lines from a PDB file.
+
     Returns a dictionary:
         { (chain, residue_number) : residue_name }
         the key is a tuple of chain and residue number.
@@ -60,8 +67,19 @@ def extract_residues(atom_lines):
 def classify_residues(residues):
     """
     Classify residues based on hydrophobic, polar and charged.
-    use the dictionary residues: {(chain, res_num): res_name}
-    returns: dict {class_residue: residues}, dict {class_residue: count}
+        use the dictionary residues: {(chain, res_num): res_name}
+
+    :param : dict
+        {(chain, residue_number): residue_name}
+    :return: dict
+    classes : dict
+        {class_name: set(residue_names)}
+
+    counts : dict
+        {class_name: {'count': int, 'percentage': float}}
+
+    chain_counts : dict
+        {chain: {class_name: {'count': int, 'percentage': float}}}
     """
     hydrophobics = {"ALA", "VAL", "LEU", "ILE", "MET", "PHE", "TRP", "PRO"}
     polars = {"SER", "THR", "ASN", "GLN", "TYR", "CYS"}
@@ -93,11 +111,11 @@ def classify_residues(residues):
             classes["HYDROPHOBICS"].add(res_name)
             counts["HYDROPHOBICS"] += 1
             chain_counts[chain]["HYDROPHOBICS"] += 1
-        if res_name in polars:
+        elif res_name in polars:
             classes["POLAR"].add(res_name)
             counts["POLAR"] += 1
             chain_counts[chain]["POLAR"] += 1
-        if res_name in charged:
+        elif res_name in charged:
             classes["CHARGED"].add(res_name)
             counts["CHARGED"] += 1
             chain_counts[chain]["CHARGED"] += 1
@@ -117,11 +135,12 @@ def classify_residues(residues):
 
     return classes, counts, chain_counts
 
-def multiple_protein_analyzer(*filepaths):
+def analyze_proteins(*filepaths):
     """
     Receives multiple PDB file paths and returns the information organized.
-    :param filepaths: tuple of PDB file paths
-    :return:
+    :param filepaths: tuple of of str
+        PDB file paths
+    :return: *** none?
     """
     for path in filepaths:
         protein_name = path.split("/")[-1]
