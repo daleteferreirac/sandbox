@@ -85,12 +85,6 @@ def classify_residues(residues):
     polars = {"SER", "THR", "ASN", "GLN", "TYR", "CYS"}
     charged = {"ARG", "LYS", "HIS", "ASP", "GLU"}
 
-    classes = {
-        "HYDROPHOBICS": set(),
-        "POLAR": set(),
-        "CHARGED": set()
-    }
-
     counts = {
         "HYDROPHOBICS": 0,
         "POLAR": 0,
@@ -108,15 +102,12 @@ def classify_residues(residues):
             }
 
         if res_name in hydrophobics:
-            classes["HYDROPHOBICS"].add(res_name)
             counts["HYDROPHOBICS"] += 1
             chain_counts[chain]["HYDROPHOBICS"] += 1
         elif res_name in polars:
-            classes["POLAR"].add(res_name)
             counts["POLAR"] += 1
             chain_counts[chain]["POLAR"] += 1
         elif res_name in charged:
-            classes["CHARGED"].add(res_name)
             counts["CHARGED"] += 1
             chain_counts[chain]["CHARGED"] += 1
 
@@ -133,30 +124,27 @@ def classify_residues(residues):
                 if total_chain > 0 else 0
             }
 
-    return classes, counts, chain_counts
+    return counts, chain_counts
 
 def analyze_proteins(*filepaths):
     """
     Receives multiple PDB file paths and returns the information organized.
-    :param filepaths: tuple of of str
+    :param filepaths: tuple of str
         PDB file paths
-    :return: *** none?
+    :return: dict
     """
+    dict = {}
+
     for path in filepaths:
         protein_name = path.split("/")[-1]
-        print(f"Protein: {protein_name}")
         atoms = load_pdb(path)
-        print(f"Number of atoms: {len(atoms)}")
-        # Extract amino acid residues
+        # extract amino acid residues
         residues, chain_info = extract_residues(atoms)
-        print(f"Total residues: {len(residues)}")
-        print("First five residues: ", list(residues.items())[:5])
-        print(f"chain information: {chain_info}")
+        counts, chain_counts = classify_residues(residues)  # tuple unpacking
+        dict[protein_name] = {
+            "atoms": len(atoms), "residues": len(residues), "First five residues": (list(residues.items())[:5]),
+            "residue-chain": chain_info, "residues-classes-counts": counts, "classes-chain": chain_counts
+        }
 
-        classes, counts, chain_counts = classify_residues(residues)  # tuple unpacking
-        print("Total residue classes:", classes)
-        print("Total residue counts:", counts)
-        print("% per chain:", chain_counts)
-
-    return
+    return dict
 
