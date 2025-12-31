@@ -7,7 +7,7 @@ def load_pdb(filepath):
         path to PDB file
     Returns
     list of str
-        Lines corresponding to ATOM and HETATM records.
+        Lines corresponding to ATOM and HETATM records. (the entire line of the pdb file)
     """
     atoms_lines = []
     with open(filepath, "r") as f:
@@ -30,24 +30,41 @@ def extract_residues(atom_lines):
     chain_info dictionary:
         {chain: number of residues}
     """
-    residues = {}
-    chain_info = {}
+    residues = {} # ('A', '1'): 'THR', (('A', '2'), 'LEU'), (('A', '3'), 'SER'),...
+    waters = {}
+    ligands = {}
+    chain_info = {} # {'HYDROPHOBICS': {'count': 19, 'percentage': 45.24}, ...}
 
     for line in atom_lines:
-        res_name = line[17:20].strip()   # VAL, ALA, ARG...
-        chain = line[21].strip()         # A, B, C...
-        res_num = line[22:26].strip()    # 1, 2, 3, 8, 54...
+        if line.startswith("ATOM"):
+            res_name = line[17:20].strip()   # VAL, ALA, ARG...
+            chain = line[21].strip()         # A, B, C...
+            res_num = line[22:26].strip()    # 1, 2, 3, 8, 54...
 
-        key = (chain, res_num)
-        if key not in residues:
-            residues[key] = res_name # ('A', '1'): 'THR', (('A', '2'), 'LEU'), (('A', '3'), 'SER'),...
+            key = (chain, res_num) # this key(a tuple) >
+            if key not in residues:
+                residues[key] = res_name # will be assigned to residues dict and receive this value : res_name
 
-            if chain not in chain_info:
-                chain_info[chain] = 1
+                if chain not in chain_info:
+                    chain_info[chain] = 1
+                else:
+                    chain_info[chain] += 1
+        elif line.startswith("HETATM"):
+            name_hetatm = line [17:20].strip()
+            chain_hetatm = line[21].strip()
+            num_hetatm = line[22:26].strip()
+            if name_hetatm == "HOH":
+                key = (chain_hetatm, num_hetatm)
+                if key not in waters:
+                    waters[key] = name_hetatm
+
             else:
-                chain_info[chain] += 1
+                key = (chain_hetatm, num_hetatm)
+                if key not in ligands:
+                    ligands[key] = name_hetatm
 
-    return residues, chain_info
+
+    return residues, chain_info, waters, ligands
 
 # def count_residue_types(residues):
 #     """
@@ -138,13 +155,14 @@ def analyze_proteins(*filepaths):
 
     for path in filepaths:
         protein_name = os.path.splitext(os.path.basename(path))[0]
+        
         atoms = load_pdb(path)
-        # extract amino acid residues
-        residues, chain_info = extract_residues(atoms)
+        # extract amino acid residues and hetatm
+        residues, chain_info, waters, ligands = extract_residues(atoms)
         counts, chain_counts = classify_residues(residues)  # tuple unpacking
         dict[protein_name] = {
             "atoms": len(atoms), "residues": len(residues), "First five residues": (list(residues.items())[:5]),
-            "residue-chain": chain_info, "residues-classes-counts": counts, "classes-chain": chain_counts
+            "residue-chain": chain_info, "residues-classes-counts": counts, "classes-chain": chain_counts, "ligands": ligands, "waters": len(waters)
         }
 
     return dict
