@@ -2,7 +2,6 @@
 
 This project is a Python tool to analyze basic structural information from PDB files.
 
-
 ---
 
 ## What this project does (so far)
