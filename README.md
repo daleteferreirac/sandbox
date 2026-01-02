@@ -21,7 +21,8 @@ Given one or more PDB files, the code extracts and organizes:
   - Water molecules (HOH)
   - Small-molecule ligands (HETATM, excluding HOH)
 
-All results are returned as Python dictionaries. 
+Water molecules and ligands are excluded from residue-based structural calculations.
+All results are returned as Python dictionaries.
 
 ---
 

@@ -151,19 +151,19 @@ def analyze_proteins(*filepaths):
         PDB file paths
     :return: dict
     """
-    dict = {}
+    results = {}
 
     for path in filepaths:
         protein_name = os.path.splitext(os.path.basename(path))[0]
-        
+
         atoms = load_pdb(path)
         # extract amino acid residues and hetatm
         residues, chain_info, waters, ligands = extract_residues(atoms)
         counts, chain_counts = classify_residues(residues)  # tuple unpacking
-        dict[protein_name] = {
+        results[protein_name] = {
             "atoms": len(atoms), "residues": len(residues), "First five residues": (list(residues.items())[:5]),
             "residue-chain": chain_info, "residues-classes-counts": counts, "classes-chain": chain_counts, "ligands": ligands, "waters": len(waters)
         }
 
-    return dict
+    return results
 
