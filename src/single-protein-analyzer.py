@@ -32,7 +32,7 @@ for protein, data in results.items():
 atoms_lines = load_pdb("../data/4AG8.pdb")
 coords_data = extract_atom_coordinates(atoms_lines)
 
-contacts = detect_residue_contacts(coords_data, cutoff=4.5)
+contacts, residues = detect_residue_contacts(coords_data, cutoff=4.5)
 print(f"Number of residue contacts: {len(contacts)}")
 print("10 contacts:")
 for c in list(contacts)[:10]: # pair of contact: (('chain', 'residue number'), ('chain', 'residue number'))
