@@ -51,4 +51,14 @@ index_residues = {} # key: i, value: res number, {'900': 0, '1073': 1, '1129': 2
 for i, res in enumerate(residues):
     index_residues[res] = i
 
+for item in contacts:
+    res1 = item[0][1] #
+    res2 = item[1][1]
 
+    i = index_residues[res1]
+    j = index_residues[res2]
+
+    matrix[i][j] = 1
+    matrix[j][i] = 1
+for line in matrix:
+    print(line)
