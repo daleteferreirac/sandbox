@@ -2,7 +2,7 @@
 from utils import analyze_proteins, load_pdb, extract_atom_coordinates, detect_residue_contacts
 import csv
 import matplotlib.pyplot as plt
-
+from matplotlib.colors import ListedColormap, BoundaryNorm
 
 protein = "../data/4AG8.pdb"
 
@@ -62,3 +62,15 @@ for item in contacts:
     matrix[j][i] = 1
 for line in matrix:
     print(line)
+
+# colors: 0 = black, 1 = yellow
+cmap = ListedColormap(["black", "yellow"])
+norm = BoundaryNorm([0, 0.5, 1], cmap.N)
+
+plt.figure(figsize=(6, 6))
+plt.imshow(matrix, cmap=cmap, norm=norm, origin="lower")
+plt.xlabel("Residue index")
+plt.ylabel("Residue index")
+plt.title("Residue Contact Map (binary)")
+plt.colorbar(ticks=[0, 1], label="Contact (0 = no, 1 = yes)")
+plt.show()
