@@ -241,14 +241,17 @@ def detect_residue_contacts(atoms, cutoff=4.5):
         for j in range(i+1, n):
             d = distance(atoms[i], atoms[j])
             if d <= cutoff:
-                res1 = (atoms[i]["chain"], atoms[i]["res_num"])
-                res2 = (atoms[j]["chain"], atoms[j]["res_num"])
+                res1 = (atoms[i]["chain"], int(atoms[i]["res_num"]))
+                res2 = (atoms[j]["chain"], int(atoms[j]["res_num"]))
 
-                if res1 != res2:
-                    contacts.add((res1, res2))
+                # remove trivial contacts
+                if res1 == res2:
+                    continue # a residue is always in contact with itself
+                if abs(res1[1] - res2[1]) <= 1: # immediate neighbors
+                    continue # skips contacts between adjacent residues residues covalently linked (not folding)
 
-    residues = set() # it has to be a set, not a list
-    for i in range(n):
-        residues.add(atoms[i]["res_num"]) # {'900', '1073', '1129', '1147', '1128',....}
+                contacts.add((res1, res2))
+
+            residues = sorted({res[1] for res_pair in contacts for res in res_pair}) # {...} →(set), result: ['845', '846', '872', '910', ...]
 
     return contacts, residues # made a set of residues to construct the matrix of contacts
