@@ -248,7 +248,7 @@ def detect_residue_contacts(atoms, cutoff=4.5):
                 if res1 == res2:
                     continue # a residue is always in contact with itself
                 if abs(res1[1] - res2[1]) <= 1: # immediate neighbors
-                    continue # skips contacts between adjacent residues residues covalently linked (not folding)
+                    continue # skips contacts between adjacent residues covalently linked (not folding)
 
                 contacts.add((res1, res2))
 
