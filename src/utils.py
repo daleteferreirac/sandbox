@@ -42,7 +42,7 @@ def extract_residues(atom_lines):
         if line.startswith("ATOM"):
             res_name = line[17:20].strip()   # VAL, ALA, ARG...
             chain = line[21].strip()         # A, B, C...
-            res_num = line[22:26].strip()    # 1, 2, 3, 8, 54...
+            res_num = int(line[22:26].strip())    # 1, 2, 3, 8, 54...
 
             key = (chain, res_num) # this key(a tuple) >
             if key not in residues:
@@ -183,7 +183,7 @@ def extract_atom_coordinates(atom_lines):
             atom_name = line[12:16].strip()
             res_name = line[17:20].strip()
             chain = line[21].strip()
-            res_num = line[22:26].strip()
+            res_num = int(line[22:26].strip())
 
             x = float(line[30:38].strip())
             y = float(line[38:46].strip())
@@ -241,8 +241,8 @@ def detect_residue_contacts(atoms, cutoff=4.5):
         for j in range(i+1, n):
             d = distance(atoms[i], atoms[j])
             if d <= cutoff:
-                res1 = (atoms[i]["chain"], int(atoms[i]["res_num"]))
-                res2 = (atoms[j]["chain"], int(atoms[j]["res_num"]))
+                res1 = (atoms[i]["chain"], atoms[i]["res_num"])
+                res2 = (atoms[j]["chain"], atoms[j]["res_num"])
 
                 # remove trivial contacts
                 if res1 == res2:
