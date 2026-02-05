@@ -1,7 +1,6 @@
 from Bio.PDB import PDBParser
 from Bio.PDB.SASA import ShrakeRupley
 
-
 def compute_sasa_per_residue(pdb_file):
     """
     Computes SASA per residue using Shrake–Rupley algorithm.
@@ -10,21 +9,21 @@ def compute_sasa_per_residue(pdb_file):
         total_sasa (float)
         sasa_per_residue (dict): {(chain, res_num): sasa}
     """
-    parser = PDBParser(QUIET=True)
+    parser = PDBParser(QUIET=True) # quiet suppress format warnings
     structure = parser.get_structure("protein", pdb_file)
 
-    sr = ShrakeRupley()
-    sr.compute(structure, level="R")
+    sr = ShrakeRupley() # Initialize Shrake–Rupley SASA calculator
+    sr.compute(structure, level="R") # R = residue level (stored in residue.sasa)
 
     sasa_per_residue = {}
     total_sasa = 0.0
 
     for residue in structure.get_residues():
-        # Skip hetero residues if desired
+        # Skip hetero residues (ligands, ions, water)
         if residue.id[0] != " ":
             continue
 
-        chain = residue.get_parent().id
+        chain = residue.get_parent().id # Chain identifier (e.g. 'A')
         res_num = residue.id[1]  # already int
 
         sasa = residue.sasa
@@ -35,6 +34,8 @@ def compute_sasa_per_residue(pdb_file):
 
 
 total_sasa, sasa_res = compute_sasa_per_residue("../data/1A6M.pdb")
+
 print(f"Total SASA: {total_sasa:.2f} Å²")
+
 for key, value in list(sasa_res.items())[:10]:
     print(key, f"{value:.2f}")
