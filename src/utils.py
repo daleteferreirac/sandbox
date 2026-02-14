@@ -3,6 +3,38 @@
 import os
 import math
 
+def parse_pdb(filepath):
+    """
+    Parse ATOM and HETATM records into structured dictionaries.
+    Returns a list of atom dictionaries.
+    """
+
+    atoms = []
+
+    with open(filepath, "r") as f:
+        for line in f:
+
+            record = line[:6].strip()
+
+            # only consider ATOM and HETATM records
+            if record not in {"ATOM", "HETATM"}:
+                continue
+
+            atom = {
+                "record": record,
+                "atom_name": line[12:16].strip(),
+                "res_name": line[17:20].strip(),
+                "chain": line[21].strip(),
+                "res_num": int(line[22:26].strip()),
+                "x": float(line[30:38].strip()),
+                "y": float(line[38:46].strip()),
+                "z": float(line[46:54].strip()),
+            }
+
+            atoms.append(atom)
+
+    return atoms
+
 def load_pdb(filepath):
     """
     Load ATOM and HETATM records from a PDB file.
@@ -255,3 +287,10 @@ def detect_residue_contacts(atoms, cutoff=4.5):
             residues = sorted({res[1] for res_pair in contacts for res in res_pair}) # {...} →(set), result: ['845', '846', '872', '910', ...]
 
     return contacts, residues # made a set of residues to construct the matrix of contacts
+
+
+#testing:
+if __name__ == "__main__":
+    atoms = parse_pdb("../data/1A6M.pdb")
+    print("Number of atoms:", len(atoms))
+    print("First atom:", atoms[0])
