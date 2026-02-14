@@ -178,7 +178,7 @@ def extract_atom_coordinates(atom_lines):
     """
     atoms = []
 
-    for line in atom_lines:
+    for line in atom_lines: # redundant PDB loading and atom, trying to find a way to refactor this
         if line.startswith("ATOM"):
             atom_name = line[12:16].strip()
             res_name = line[17:20].strip()
