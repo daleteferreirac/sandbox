@@ -7,6 +7,7 @@ def parse_pdb(filepath):
     """
     Parse ATOM and HETATM records into structured dictionaries.
     Returns a list of atom dictionaries.
+    example: [{'record': 'ATOM', 'atom_name': 'N', 'res_name': 'VAL', 'chain': 'A', 'res_num': 1, 'x': -4.004, 'y': 15.224, 'z': 13.636}, ...]
     """
 
     atoms = []
@@ -16,7 +17,7 @@ def parse_pdb(filepath):
 
             record = line[:6].strip()
 
-            # only consider ATOM and HETATM records
+            # only consider ATOM and HETATM records, including ligands
             if record not in {"ATOM", "HETATM"}:
                 continue
 
@@ -289,8 +290,3 @@ def detect_residue_contacts(atoms, cutoff=4.5):
     return contacts, residues # made a set of residues to construct the matrix of contacts
 
 
-#testing:
-if __name__ == "__main__":
-    atoms = parse_pdb("../data/1A6M.pdb")
-    print("Number of atoms:", len(atoms))
-    print("First atom:", atoms[0])
