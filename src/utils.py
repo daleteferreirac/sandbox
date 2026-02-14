@@ -71,34 +71,20 @@ def extract_residues(atom_lines):
     ligands = {}
     chain_info = {} # {'HYDROPHOBICS': {'count': 19, 'percentage': 45.24}, ...}
 
-    for line in atom_lines:
-        if line.startswith("ATOM"):
-            res_name = line[17:20].strip()   # VAL, ALA, ARG...
-            chain = line[21].strip()         # A, B, C...
-            res_num = int(line[22:26].strip())    # 1, 2, 3, 8, 54...
+    for atom in atoms:
 
-            key = (chain, res_num) # this key(a tuple) >
+        key = (atom["chain"], atom["res_num"])
+
+        if atom["record"] == "ATOM":
             if key not in residues:
-                residues[key] = res_name # will be assigned to residues dict and receive this value : res_name
+                residues[key] = atom["res_name"] # {('A', 1): 'VAL', ('A', 2): 'LEU', ('A', 3): 'SER', ('A', 4): 'GLU', ...}
+                chain_info[atom["chain"]] = chain_info.get(atom["chain"], 0) + 1 # {'A': 151}
 
-                if chain not in chain_info:
-                    chain_info[chain] = 1
-                else:
-                    chain_info[chain] += 1
-        elif line.startswith("HETATM"):
-            name_hetatm = line [17:20].strip()
-            chain_hetatm = line[21].strip()
-            num_hetatm = line[22:26].strip()
-            if name_hetatm == "HOH":
-                key = (chain_hetatm, num_hetatm)
-                if key not in waters:
-                    waters[key] = name_hetatm
-
+        elif atom["record"] == "HETATM":
+            if atom["res_name"] == "HOH":
+                waters[key] = atom["res_name"] # {('A', 1002): 'HOH', ('A', 1003): 'HOH', ('A', 1004): 'HOH',...}
             else:
-                key = (chain_hetatm, num_hetatm)
-                if key not in ligands:
-                    ligands[key] = name_hetatm
-
+                ligands[key] = atom["res_name"] # example of 4AG8: {('A', 2000): 'AXI'}
 
     return residues, chain_info, waters, ligands
 
@@ -290,3 +276,7 @@ def detect_residue_contacts(atoms, cutoff=4.5):
     return contacts, residues # made a set of residues to construct the matrix of contacts
 
 
+# testing extract_residues:
+atoms = parse_pdb("../data/4AG8.pdb")
+residues, chain_info, waters, ligands = extract_residues(atoms)
+print(ligands)
