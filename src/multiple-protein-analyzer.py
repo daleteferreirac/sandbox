@@ -24,3 +24,5 @@ with open("protein-summary.csv", "w", newline="") as csvfile:
             data["waters"],
             len(data["ligands"])
         ])
+
+# the results is generation of a .csv file with the information
