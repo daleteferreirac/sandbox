@@ -53,7 +53,7 @@ def load_pdb(filepath):
 
     return atoms_lines
 
-def extract_residues(atom_lines):
+def extract_residues(atoms):
     """
     Extracts all unique residues from a list of ATOM/HETATM lines.
     :param : list of str
@@ -178,7 +178,7 @@ def analyze_proteins(*filepaths):
     for path in filepaths:
         protein_name = os.path.splitext(os.path.basename(path))[0]
 
-        atoms = load_pdb(path)
+        atoms = parse_pdb(path)
         # extract amino acid residues and hetatm
         residues, chain_info, waters, ligands = extract_residues(atoms)
         counts, chain_counts = classify_residues(residues)  # tuple unpacking
@@ -276,7 +276,3 @@ def detect_residue_contacts(atoms, cutoff=4.5):
     return contacts, residues # made a set of residues to construct the matrix of contacts
 
 
-# testing extract_residues:
-atoms = parse_pdb("../data/4AG8.pdb")
-residues, chain_info, waters, ligands = extract_residues(atoms)
-print(ligands)

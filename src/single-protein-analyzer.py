@@ -1,5 +1,5 @@
 # Analyzes a single protein and returns information in dictionary and graph format.
-from utils import analyze_proteins, load_pdb, extract_atom_coordinates, detect_residue_contacts
+from utils import parse_pdb, analyze_proteins, detect_residue_contacts
 import csv
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap, BoundaryNorm
@@ -29,10 +29,9 @@ for protein, data in results.items():
     plt.title(f"Residue class composition – {protein}")
 #    plt.show()
 
-atoms_lines = load_pdb("../data/1A6M.pdb")
-coords_data = extract_atom_coordinates(atoms_lines)
+atoms = parse_pdb("../data/1A6M.pdb")
+contacts, residues = detect_residue_contacts(atoms, cutoff=4.5)
 
-contacts, residues = detect_residue_contacts(coords_data, cutoff=4.5)
 print(f"Number of residue contacts: {len(contacts)}")
 print("10 contacts:")
 for c in list(contacts)[:10]: # pair of contact: (('chain', 'residue number'), ('chain', 'residue number'))
