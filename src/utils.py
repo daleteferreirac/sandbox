@@ -256,8 +256,16 @@ def detect_residue_contacts(atoms, cutoff=4.5):
     contacts = set() # avoid duplicates
 
     n = len(atoms)
+
+    # use j = i + 1 to avoid comparing an atom with itself and duplicate comparisons (i,j) and (j,i)
+    # double loop over all atom pairs.
     for i in range(n):
         for j in range(i+1, n):
+
+            # Ignore non-protein atoms
+            if atoms[i]["record"] != "ATOM" or atoms[j]["record"] != "ATOM":
+                continue
+
             d = distance(atoms[i], atoms[j])
             if d <= cutoff:
                 res1 = (atoms[i]["chain"], atoms[i]["res_num"])

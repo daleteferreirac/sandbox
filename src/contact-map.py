@@ -1,11 +1,10 @@
-from utils import load_pdb, extract_atom_coordinates, detect_residue_contacts
+from utils import parse_pdb, detect_residue_contacts
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap, BoundaryNorm
 
-atoms_lines = load_pdb("../data/1A6M.pdb")
-coords_data = extract_atom_coordinates(atoms_lines)
+atoms = parse_pdb("../data/4AG8.pdb")
 
-contacts, residues = detect_residue_contacts(coords_data, cutoff=4.5)
+contacts, residues = detect_residue_contacts(atoms, cutoff=4.5)
 print(f"Number of residue contacts: {len(contacts)}")
 print("10 contacts:")
 for c in list(contacts)[:10]: # pair of contact: (('chain', 'residue number'), ('chain', 'residue number'))
