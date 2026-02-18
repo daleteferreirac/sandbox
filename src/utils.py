@@ -36,22 +36,6 @@ def parse_pdb(filepath):
 
     return atoms
 
-def load_pdb(filepath):
-    """
-    Load ATOM and HETATM records from a PDB file.
-    :param : str
-        path to PDB file
-    Returns
-    list of str
-        Lines corresponding to ATOM and HETATM records. (the entire line of the pdb file)
-    """
-    atoms_lines = []
-    with open(filepath, "r") as f:
-        for line in f:
-            if line.startswith("ATOM") or line.startswith("HETATM"): # atoms or ligands
-                atoms_lines.append(line.strip()) # removes \n
-
-    return atoms_lines
 
 def extract_residues(atoms):
     """
@@ -88,21 +72,6 @@ def extract_residues(atoms):
 
     return residues, chain_info, waters, ligands
 
-# def count_residue_types(residues):
-#     """
-#     Counts how many times each amino acid appears.
-#     residues: dict {(chain, res_num): res_name}
-#     returns: dict {res_name: count}
-#     """
-#     counts = {}
-#
-#     for res_name in residues.values():
-#         if res_name not in counts:
-#             counts[res_name] = 1
-#         else:
-#             counts[res_name] += 1
-#
-#     return counts
 
 def classify_residues(residues):
     """
@@ -188,37 +157,6 @@ def analyze_proteins(*filepaths):
         }
 
     return results
-
-def extract_atom_coordinates(atom_lines):
-    """
-    Returns a list of atoms with coordinates.
-    Each atom: dict with keys: chain, res_num, res_name, atom_name, x, y, z
-    [{'chain': 'A', 'res_num': '1', 'res_name': 'THR', 'atom_name': 'N', 'x': 17.047, 'y': 14.099, 'z': 3.625} ....
-    """
-    atoms = []
-
-    for line in atom_lines: # redundant PDB loading and atom, trying to find a way to refactor this
-        if line.startswith("ATOM"):
-            atom_name = line[12:16].strip()
-            res_name = line[17:20].strip()
-            chain = line[21].strip()
-            res_num = int(line[22:26].strip())
-
-            x = float(line[30:38].strip())
-            y = float(line[38:46].strip())
-            z = float(line[46:54].strip())
-
-            atoms.append({
-                "chain": chain,
-                "res_num": res_num,
-                "res_name": res_name,
-                "atom_name": atom_name,
-                "x": x,
-                "y": y,
-                "z": z
-            })
-
-    return atoms
 
 def distance(atom1, atom2):
     """
