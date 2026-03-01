@@ -217,7 +217,7 @@ def detect_residue_contacts(atoms, cutoff=4.5):
 
                 contacts.add((res1, res2))
 
-            residues = sorted({res[1] for res_pair in contacts for res in res_pair}) # {...} →(set), result: ['845', '846', '872', '910', ...]
+    residues = sorted({res[1] for res_pair in contacts for res in res_pair}) # {...} →(set), result: ['845', '846', '872', '910', ...]
 
     return contacts, residues # made a set of residues to construct the matrix of contacts
 
