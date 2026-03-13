@@ -62,7 +62,6 @@ data/
 - Binary contact map  
 - CSV summary file  
 - Total and per-residue SASA values  
-
 ---
 
 ## Notes
