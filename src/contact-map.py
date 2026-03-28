@@ -1,8 +1,9 @@
 from utils import parse_pdb, detect_residue_contacts
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap, BoundaryNorm
+import numpy as np
 
-atoms = parse_pdb("../data/4AG8.pdb")
+atoms = parse_pdb("../data/1A6M.pdb")
 
 contacts, residues = detect_residue_contacts(atoms, cutoff=4.5)
 print(f"Number of residue contacts: {len(contacts)}")
@@ -13,12 +14,7 @@ for c in list(contacts)[:10]: # pair of contact: (('chain', 'residue number'), (
 
 # matrix of contacts
 res = len(residues)
-matrix = []
-for i in range(res):
-    row = []
-    for j in range(res):
-        row.append(0)
-    matrix.append(row)
+matrix = np.zeros((res, res))
 
 index_residues = {} # key: i, value: res number, {'900': 0, '1073': 1, '1129': 2, '1147': 3,...}
 for i, res in enumerate(residues):
@@ -31,8 +27,8 @@ for item in contacts:
     i = index_residues[res1]
     j = index_residues[res2]
 
-    matrix[i][j] = 1
-    matrix[j][i] = 1
+    matrix[i, j] = 1
+    matrix[j, i] = 1
 for line in matrix:
     print(line)
 
