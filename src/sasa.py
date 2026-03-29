@@ -32,7 +32,6 @@ def compute_sasa_per_residue(pdb_file):
 
     return total_sasa, sasa_per_residue
 
-
 total_sasa, sasa_res = compute_sasa_per_residue("../data/1A6M.pdb")
 
 print(f"Total SASA: {total_sasa:.2f} Å²")

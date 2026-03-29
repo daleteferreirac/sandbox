@@ -76,8 +76,7 @@ data/
 
 Berman, H. M., et al. (2000).  
 *The Protein Data Bank.*  
-Nucleic Acids Research, 28(1), 235–242.  
-https://doi.org/10.1093/nar/28.1.235  
+Nucleic Acids Research, 28(1), 235–242.
 
 Vendruscolo, M., & Domany, E. (1997).  
 *Recovery of protein structure from contact maps.*  
