@@ -42,9 +42,20 @@ def compute_sasa_per_residue(pdb_file):
         else:
             relative = None  # fallback for unknown residues
 
+        if relative is not None:
+            if relative < 0.2:
+                exposure = "buried"
+            elif relative > 0.5:
+                exposure = "exposed"
+            else:
+                exposure = "intermediate"
+        else:
+            exposure = None
+
         sasa_per_residue[(chain, res_num)] = {
             "absolute": sasa,
-            "relative": relative
+            "relative": relative,
+            "exposure": exposure
         }
         total_sasa += sasa
 
@@ -58,5 +69,6 @@ for key, value in list(sasa_res.items())[:10]:
     print(
         key,
         f"abs={value['absolute']:.2f}",
-        f"rel={value['relative']:.2f}" if value["relative"] else "rel=None"
+        f"rel={value['relative']:.2f}" if value["relative"] else "rel=None",
+        f"class={value['exposure']}"
     )
