@@ -11,7 +11,8 @@ This project performs structural analysis of proteins from PDB files, including:
 - Parsing ATOM and HETATM records  
 - Residue extraction and classification  
 - Residue contact map generation  
-- Solvent Accessible Surface Area (SASA) calculation  
+- Solvent Accessible Surface Area (SASA) calculation
+- Relative SASA and residue exposure classification
 - Comparative analysis of multiple proteins  
 
 The main objective was to implement core structural bioinformatics concepts manually to strengthen Python programming skills.
@@ -38,6 +39,13 @@ The main objective was to implement core structural bioinformatics concepts manu
 ### 3. SASA Calculation
 
 - Implemented using the Shrake–Rupley algorithm via Bio.PDB  
+- Per-residue SASA values (Å²)
+- Relative SASA normalization using residue-specific reference values
+- Residue exposure classification:
+  - Buried (< 0.2)
+  - Intermediate (0.2–0.5)
+  - Exposed (> 0.5)
+- Summary of exposure distribution across the protein
 
 ---
 
@@ -62,6 +70,7 @@ data/
 - Binary contact map  
 - CSV summary file  
 - Total and per-residue SASA values  
+- Relative SASA and exposure classification
 ---
 
 ## Notes
@@ -81,4 +90,8 @@ Nucleic Acids Research, 28(1), 235–242.
 Vendruscolo, M., & Domany, E. (1997).  
 *Recovery of protein structure from contact maps.*  
 Folding and Design.
+
+Shrake, A., & Rupley, J. A. (1973).
+Environment and exposure to solvent of protein atoms.
+Journal of Molecular Biology.
 ```
