@@ -68,6 +68,7 @@ data/
 
 - Residue class bar plot  
 - Binary contact map  
+![Contact Map](outputs/contact_map.png)
 - CSV summary file  
 - Total and per-residue SASA values  
 - Relative SASA and exposure classification
