@@ -64,6 +64,16 @@ def compute_sasa_per_residue(pdb_file):
 total_sasa, sasa_res = compute_sasa_per_residue("../data/1A6M.pdb")
 
 print(f"Total SASA: {total_sasa:.2f} Å²")
+buried = sum(1 for v in sasa_res.values() if v["exposure"] == "buried")
+exposed = sum(1 for v in sasa_res.values() if v["exposure"] == "exposed")
+intermediate = sum(1 for v in sasa_res.values() if v["exposure"] == "intermediate")
+
+total = len(sasa_res)
+
+print("\nExposure summary:")
+print(f"Buried: {buried} ({buried/total*100:.1f}%)")
+print(f"Exposed: {exposed} ({exposed/total*100:.1f}%)")
+print(f"Intermediate: {intermediate} ({intermediate/total*100:.1f}%)\n")
 
 for key, value in list(sasa_res.items())[:10]:
     print(
