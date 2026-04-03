@@ -42,5 +42,7 @@ plt.xlabel("Residue index")
 plt.ylabel("Residue index")
 plt.title("Residue Contact Map (binary)")
 plt.colorbar(ticks=[0, 1], label="Contact (0 = no, 1 = yes)")
-plt.show()
+
+plt.savefig("../outputs/contact_map.png", dpi=300, bbox_inches="tight")
+plt.close()
 
