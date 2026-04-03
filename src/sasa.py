@@ -69,6 +69,6 @@ for key, value in list(sasa_res.items())[:10]:
     print(
         key,
         f"abs={value['absolute']:.2f}",
-        f"rel={value['relative']:.2f}" if value["relative"] else "rel=None",
+        f"rel={value['relative']:.2f}" if value["relative"] is not None else "rel=None",
         f"class={value['exposure']}"
     )
