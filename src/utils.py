@@ -36,7 +36,6 @@ def parse_pdb(filepath):
 
     return atoms
 
-
 def extract_residues(atoms):
     """
     Extracts all unique residues from a list of ATOM/HETATM lines.
@@ -71,7 +70,6 @@ def extract_residues(atoms):
                 ligands[key] = atom["res_name"] # example of 4AG8: {('A', 2000): 'AXI'}
 
     return residues, chain_info, waters, ligands
-
 
 def classify_residues(residues):
     """

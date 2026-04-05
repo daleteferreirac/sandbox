@@ -1,5 +1,15 @@
 from Bio.PDB import PDBParser
 from Bio.PDB.SASA import ShrakeRupley
+from utils import parse_pdb,detect_residue_contacts
+
+atoms = parse_pdb("../data/1A6M.pdb")
+contacts, _ = detect_residue_contacts(atoms)
+
+contact_count = {} # count contacts per residue
+
+for res1, res2 in contacts:
+    contact_count[res1] = contact_count.get(res1, 0) + 1
+    contact_count[res2] = contact_count.get(res2, 0) + 1
 
 MAX_SASA = {
     "ALA": 129, "VAL": 174, "LEU": 201, "ILE": 197,
@@ -82,3 +92,15 @@ for key, value in list(sasa_res.items())[:10]:
         f"rel={value['relative']:.2f}" if value["relative"] is not None else "rel=None",
         f"class={value['exposure']}"
     )
+
+
+for key in list(sasa_res.keys())[:10]:
+    rel = sasa_res[key]["relative"]
+    contacts = contact_count.get(key, 0)
+
+    if rel is not None:
+        rel_str = f"{rel:.2f}"
+    else:
+        rel_str = "None"
+
+    print(key, f"rel={rel_str}", f"contacts={contacts}")
