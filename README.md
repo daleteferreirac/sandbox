@@ -36,17 +36,26 @@ The main objective was to implement core structural bioinformatics concepts manu
 - Residue–residue contact detection (cutoff-based)  
 - Binary contact matrix visualization  
 
-### 3. SASA Calculation
+### 3. SASA and Structural Context
 
 - Implemented using the Shrake–Rupley algorithm via Bio.PDB  
-- Per-residue SASA values (Å²)
-- Relative SASA normalization using residue-specific reference values
+- Per-residue SASA values (Å²)  
+- Relative SASA normalization using residue-specific reference values  
 - Residue exposure classification:
   - Buried (< 0.2)
   - Intermediate (0.2–0.5)
   - Exposed (> 0.5)
-- Summary of exposure distribution across the protein
 
+- Integration with residue contact analysis:
+  - Number of contacts computed per residue
+  - Allows comparison between solvent exposure and structural packing
+
+- Observed trend:
+  - Buried residues tend to have more contacts  
+  - Exposed residues tend to have fewer contacts  
+
+- Note:
+  - Some residues may have `relative SASA = None` due to missing reference values (e.g., non-standard residues)
 ---
 
 ## Project Structure
