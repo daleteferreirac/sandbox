@@ -3,12 +3,12 @@ from Bio.PDB.SASA import ShrakeRupley
 from utils import parse_pdb,detect_residue_contacts
 
 atoms = parse_pdb("../data/1A6M.pdb")
-contacts, _ = detect_residue_contacts(atoms)
+contacts, _ = detect_residue_contacts(atoms) # e.g: (('A', 4), ('A', 79))
 
 contact_count = {} # count contacts per residue
 
 for res1, res2 in contacts:
-    contact_count[res1] = contact_count.get(res1, 0) + 1
+    contact_count[res1] = contact_count.get(res1, 0) + 1 # key-> res1, value-> contacts that each res have
     contact_count[res2] = contact_count.get(res2, 0) + 1
 
 MAX_SASA = {
@@ -17,7 +17,7 @@ MAX_SASA = {
     "SER": 155, "THR": 172, "ASN": 195, "GLN": 223,
     "TYR": 263, "CYS": 167,
     "ARG": 274, "LYS": 236, "HIS": 224, "ASP": 193, "GLU": 223
-}
+} # # maxi SASA values for each amino acid (used for normalization)
 
 def compute_sasa_per_residue(pdb_file):
     """
@@ -93,7 +93,7 @@ for key, value in list(sasa_res.items())[:10]:
         f"class={value['exposure']}"
     )
 
-
+# Combine SASA with contact information
 for key in list(sasa_res.keys())[:10]:
     rel = sasa_res[key]["relative"]
     contacts = contact_count.get(key, 0)
