@@ -8,6 +8,7 @@ contacts, _ = detect_residue_contacts(atoms) # e.g: (('A', 4), ('A', 79))
 contact_count = {} # count contacts per residue
 
 for res1, res2 in contacts:
+    # .get(key, 0) avoids KeyError and initializes missing keys with 0
     contact_count[res1] = contact_count.get(res1, 0) + 1 # key-> res1, value-> contacts that each res have
     contact_count[res2] = contact_count.get(res2, 0) + 1
 
@@ -41,12 +42,14 @@ def compute_sasa_per_residue(pdb_file):
         if residue.id[0] != " ":
             continue
 
+        # extract residue identifiers
         chain = residue.get_parent().id # Chain identifier (e.g. 'A')
         res_num = residue.id[1]  # already int
 
         res_name = residue.get_resname()
         sasa = residue.sasa
 
+        # classify residue exposure based on relative sasa
         if res_name in MAX_SASA:
             relative = sasa / MAX_SASA[res_name]
         else:
@@ -74,6 +77,7 @@ def compute_sasa_per_residue(pdb_file):
 total_sasa, sasa_res = compute_sasa_per_residue("../data/1A6M.pdb")
 
 print(f"Total SASA: {total_sasa:.2f} Å²")
+# count how many residues fall into each exposure classe
 buried = sum(1 for v in sasa_res.values() if v["exposure"] == "buried")
 exposed = sum(1 for v in sasa_res.values() if v["exposure"] == "exposed")
 intermediate = sum(1 for v in sasa_res.values() if v["exposure"] == "intermediate")
@@ -97,7 +101,7 @@ for key, value in list(sasa_res.items())[:10]:
 for key in list(sasa_res.keys())[:10]:
     rel = sasa_res[key]["relative"]
     contacts = contact_count.get(key, 0)
-
+# format relative sasa safely (avoid none formatting error)
     if rel is not None:
         rel_str = f"{rel:.2f}"
     else:
