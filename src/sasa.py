@@ -59,7 +59,7 @@ def compute_sasa_per_residue(pdb_file):
         if relative is not None:
             if relative < 0.2:
                 exposure = "buried"
-            elif relative > 0.5:
+            elif relative > 0.25:
                 exposure = "exposed"
             else:
                 exposure = "intermediate"
