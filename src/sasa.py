@@ -3,7 +3,7 @@ from Bio.PDB.SASA import ShrakeRupley
 from utils import parse_pdb,detect_residue_contacts
 import matplotlib.pyplot as plt
 
-atoms = parse_pdb("../data/1A6M.pdb")
+atoms = parse_pdb("../data/4AG8.pdb")
 contacts, _ = detect_residue_contacts(atoms) # e.g: (('A', 4), ('A', 79))
 
 contact_count = {} # count contacts per residue
@@ -75,7 +75,7 @@ def compute_sasa_per_residue(pdb_file):
 
     return total_sasa, sasa_per_residue
 
-total_sasa, sasa_res = compute_sasa_per_residue("../data/1A6M.pdb")
+total_sasa, sasa_res = compute_sasa_per_residue("../data/4AG8.pdb")
 
 print(f"Total SASA: {total_sasa:.2f} Å²")
 # count how many residues fall into each exposure classe
