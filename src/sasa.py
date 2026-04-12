@@ -1,6 +1,7 @@
 from Bio.PDB import PDBParser
 from Bio.PDB.SASA import ShrakeRupley
 from utils import parse_pdb,detect_residue_contacts
+import matplotlib.pyplot as plt
 
 atoms = parse_pdb("../data/1A6M.pdb")
 contacts, _ = detect_residue_contacts(atoms) # e.g: (('A', 4), ('A', 79))
@@ -108,3 +109,26 @@ for key in list(sasa_res.keys())[:10]:
         rel_str = "None"
 
     print(key, f"rel={rel_str}", f"contacts={contacts}")
+
+rel_values = []
+contact_values = []
+
+for key in sasa_res:
+    rel = sasa_res[key]["relative"]
+    contacts = contact_count.get(key, 0)
+
+    # ignore residues without relative SASA
+    if rel is None:
+        continue
+
+    rel_values.append(rel)
+    contact_values.append(contacts)
+
+plt.figure(figsize=(6, 6))
+plt.scatter(rel_values, contact_values)
+
+plt.xlabel("Relative SASA")
+plt.ylabel("Number of Contacts")
+plt.title("SASA vs Residue Contacts")
+
+plt.show()
