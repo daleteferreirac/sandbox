@@ -2,8 +2,11 @@ from utils import parse_pdb, detect_residue_contacts
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap, BoundaryNorm
 import numpy as np
+import os
 
-atoms = parse_pdb("../data/1A6M.pdb")
+pdb_path = "../data/4AG8.pdb"
+atoms = parse_pdb(pdb_path)
+pdb_name = os.path.basename(pdb_path).replace(".pdb", "")
 
 contacts, residues = detect_residue_contacts(atoms, cutoff=4.5)
 print(f"Number of residue contacts: {len(contacts)}")
@@ -40,7 +43,7 @@ plt.figure(figsize=(6, 6))
 plt.imshow(matrix, cmap=cmap, norm=norm, origin="lower")
 plt.xlabel("Residue index")
 plt.ylabel("Residue index")
-plt.title("Residue Contact Map (binary)")
+plt.title(f"Residue Contact Map ({pdb_name})")
 plt.colorbar(ticks=[0, 1], label="Contact (0 = no, 1 = yes)")
 
 plt.savefig("../outputs/contact_map.png", dpi=300, bbox_inches="tight")
