@@ -4,7 +4,7 @@ from matplotlib.colors import ListedColormap, BoundaryNorm
 import numpy as np
 import os
 
-pdb_path = "../data/4AG8.pdb"
+pdb_path = "../data/1A6M.pdb"
 atoms = parse_pdb(pdb_path)
 pdb_name = os.path.basename(pdb_path).replace(".pdb", "")
 
@@ -20,6 +20,8 @@ res = len(residues)
 matrix = np.zeros((res, res))
 
 index_residues = {} # key: i, value: res number, {'900': 0, '1073': 1, '1129': 2, '1147': 3,...}
+
+residues = sorted(residues)
 for i, res in enumerate(residues):
     index_residues[res] = i
 
