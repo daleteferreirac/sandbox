@@ -46,6 +46,6 @@ plt.ylabel("Residue index")
 plt.title(f"Residue Contact Map ({pdb_name})")
 plt.colorbar(ticks=[0, 1], label="Contact (0 = no, 1 = yes)")
 
-plt.savefig("../outputs/contact_map.png", dpi=300, bbox_inches="tight")
+plt.savefig(f"../outputs/{pdb_name}_contact_map.png", dpi=300, bbox_inches="tight")
 plt.close()
 
