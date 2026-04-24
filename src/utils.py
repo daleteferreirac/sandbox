@@ -6,7 +6,14 @@ import math
 def parse_pdb(filepath):
     """
     Parse ATOM and HETATM records into structured dictionaries.
-    Returns a list of atom dictionaries.
+    list of dict:
+        Each atom contains:
+        - record (ATOM or HETATM)
+        - atom_name
+        - res_name
+        - chain
+        - res_num (int)
+        - x, y, z (float coordinates)
     example: [{'record': 'ATOM', 'atom_name': 'N', 'res_name': 'VAL', 'chain': 'A', 'res_num': 1, 'x': -4.004, 'y': 15.224, 'z': 13.636}, ...]
     """
 
