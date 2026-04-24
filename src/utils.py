@@ -175,21 +175,6 @@ def distance(atom1, atom2):
     dz = atom1["z"] - atom2["z"]
     return math.sqrt(dx * dx + dy * dy + dz * dz)
 
-def atomic_distance(atoms, cutoff=4.5): # contacts atom-atom
-    """
-        Returns list of tuples:
-        (atom1, atom2, distance)
-        """
-    contacts = []
-
-    n = len(atoms)
-    for i in range(n):
-        for j in range(i + 1, n):
-            d = distance(atoms[i], atoms[j])
-            if d <= cutoff:
-                contacts.append((atoms[i], atoms[j], d))
-
-    return contacts
 
 def detect_residue_contacts(atoms, cutoff=4.5):
     """
