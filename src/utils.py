@@ -1,7 +1,7 @@
 # Helper functions for the structural analyzer
-
 import os
 import math
+from Bio.PDB import PDBParser, NeighborSearch
 
 def parse_pdb(filepath):
     """
@@ -211,4 +211,49 @@ def detect_residue_contacts(atoms, cutoff=4.5):
 
     return contacts, residues # made a set of residues to construct the matrix of contacts
 
+def detect_residues_contacts_fast(pdb_file, cuttoff=4.5):
+    parser = PDBParser(QUIET=True)
+    structure = parser.get_structure("prot", pdb_file)    # create objects Atom with .coord, .get_parent(), etc.
 
+    all_atoms = list(structure.get_atoms())  # objects from Atom into a list
+
+    ns = NeighborSearch(all_atoms) # kd tree with coodernates
+
+    contacts = set()
+
+    for atom in all_atoms: # for each atom, search neighbors whithin the cutoff
+
+        if atom.get_parent().id[0] != " ": # ignores hetreroatoms
+            continue
+
+        neighbors = ns.search(atom.coord, cutoff, level='A')  # .search() retorn list of atoms whitin the radius at the level 'A'atom
+
+        res1 = atom.get_parent() # atom.get_parent() retorn objet Residue from their atom
+
+        for neighbor in neighbors:
+
+            if neighbor.get_parent().id[0] != " ": # ignores hetatom from the neighbors
+                continue
+
+            res2 = neighbor.get_parent()
+
+            # ignores contact itself
+            if res1 == res2:
+                continue
+
+            num1 = res1.id[1]   #sequence of each atom: res1.id = (' ', 47, ' '), [1] is the number
+            num2 = res2.id[1]
+
+            # immediate neighbors
+            if abs(num1 - num2) <= 1:
+                continue
+
+            # chain ID: 'A', 'B', etc.
+            chain1 = res1.get_parent().id
+            chain2 = res2.get_parent().id
+
+            # tuple(sorted(...)) garantees that (A,4)-(A,79) and (A,79)-(A,4) is the same key
+            key = tuple(sorted([(chain1, num1), (chain2, num2)]))
+            contacts.add(key)
+
+    return contacts
