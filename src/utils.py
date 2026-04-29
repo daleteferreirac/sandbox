@@ -211,7 +211,7 @@ def detect_residue_contacts(atoms, cutoff=4.5):
 
     return contacts, residues # made a set of residues to construct the matrix of contacts
 
-def detect_residues_contacts_fast(pdb_file, cuttoff=4.5):
+def detect_residues_contacts_fast(pdb_file, cutoff=4.5):
     parser = PDBParser(QUIET=True)
     structure = parser.get_structure("prot", pdb_file)    # create objects Atom with .coord, .get_parent(), etc.
 
