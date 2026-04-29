@@ -1,5 +1,5 @@
 # Analyzes a single protein and returns information in dictionary and graph format.
-from utils import parse_pdb, analyze_proteins, detect_residue_contacts
+from utils import parse_pdb, analyze_proteins, detect_residues_contacts_fast
 import csv
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap, BoundaryNorm
@@ -29,8 +29,8 @@ for protein, data in results.items():
     plt.title(f"Residue class composition – {protein}")
 #    plt.show()
 
-atoms = parse_pdb("../data/1A6M.pdb")
-contacts, residues = detect_residue_contacts(atoms, cutoff=4.5)
+contacts, residues = detect_residues_contacts_fast("../data/1A6M.pdb", cutoff=4.5)
+
 
 print(f"Number of residue contacts: {len(contacts)}")
 print("10 contacts:")
