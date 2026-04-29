@@ -256,4 +256,6 @@ def detect_residues_contacts_fast(pdb_file, cuttoff=4.5):
             key = tuple(sorted([(chain1, num1), (chain2, num2)]))
             contacts.add(key)
 
-    return contacts
+    residues = sorted({res[1] for pair in contacts for res in pair})
+
+    return contacts,  residues
