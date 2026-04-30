@@ -1,10 +1,9 @@
 from Bio.PDB import PDBParser
 from Bio.PDB.SASA import ShrakeRupley
-from utils import parse_pdb,detect_residue_contacts
+from utils import detect_residues_contacts_fast
 import matplotlib.pyplot as plt
 
-atoms = parse_pdb("../data/4AG8.pdb")
-contacts, _ = detect_residue_contacts(atoms) # e.g: (('A', 4), ('A', 79))
+contacts, _ = detect_residues_contacts_fast("../data/4AG8.pdb") # e.g: (('A', 4), ('A', 79))
 
 contact_count = {} # count contacts per residue
 
